@@ -1,11 +1,10 @@
 name: Python CI
+
 on:
- push:
-   branches:
-     - main
- pull_request:
-   branches:
-     - main
+  schedule:
+    # 在每个整点和半点执行 (0分和30分)
+    - cron: '0,30 * * * *'
+    
 jobs:
  build:
    runs-on: ubuntu-latest
