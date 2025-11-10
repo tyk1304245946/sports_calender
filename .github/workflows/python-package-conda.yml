@@ -25,4 +25,4 @@ jobs:
          pip install -r requirements.txt
      # 运行测试
      - name: Run
-       run: python main.py
+       run: python main.py --app_id {{ $secrets.FEISHU_APP_ID }} --app_secret {{ $secrets.FEISHU_APP_SECRET }}
