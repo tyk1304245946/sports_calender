@@ -7,7 +7,9 @@ on:
     # # 在每晚七点五十五执行（UTC时间，对应北京时间第二天凌晨三点五十五）
     # - cron: '55 19 * * *'
     # 如果需要在北京时间晚上七点五十五执行，使用下面的cron表达式：
-    - cron: "55 11 * * *" # UTC 11:55 = 北京时间 19:55
+    # - cron: "55 11 * * *" # UTC 11:55 = 北京时间 19:55
+    # 北京时间早上九点
+    - cron: "0 1 * * *" # UTC 01:00 = 北京时间 09:00
 
 jobs:
   build:
@@ -32,5 +34,5 @@ jobs:
         run: python main.py --to_feishu --app_id ${{ secrets.FEISHU_APP_ID }} --app_secret ${{ secrets.FEISHU_APP_SECRET }}
       # 运行晚间任务（七点五十五）
       - name: Run evening task
-        if: github.event.schedule == '55 11 * * *'
+        if: github.event.schedule == '0 1 * * *'
         run: python main.py --to_email  --sender_email ${{ secrets.SENDER_EMAIL }} --password ${{ secrets.EMAIL_PASSWORD }} --receiver_email ${{ secrets.RECEIVER_EMAIL }}
