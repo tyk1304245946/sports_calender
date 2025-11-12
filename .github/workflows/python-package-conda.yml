@@ -3,25 +3,34 @@ name: Python CI
 on:
   schedule:
     # 在每个整点和半点执行 (0分和30分)
-    - cron: '0,30 * * * *'
-    
+    - cron: "0,30 * * * *"
+    # # 在每晚七点五十五执行（UTC时间，对应北京时间第二天凌晨三点五十五）
+    # - cron: '55 19 * * *'
+    # 如果需要在北京时间晚上七点五十五执行，使用下面的cron表达式：
+    - cron: "55 11 * * *" # UTC 11:55 = 北京时间 19:55
+
 jobs:
- build:
-   runs-on: ubuntu-latest
-   steps:
-     # 检出代码
-     - name: Checkout code
-       uses: actions/checkout@v4
-     # 设置 Python 环境
-     - name: Set up Python
-       uses: actions/setup-python@v5
-       with:
-         python-version: '3.12'
-     # 安装依赖
-     - name: Install dependencies
-       run: |
-         python -m pip install --upgrade pip
-         pip install -r requirements.txt
-     # 运行测试
-     - name: Run
-       run: python main.py --app_id ${{ secrets.FEISHU_APP_ID }} --app_secret ${{ secrets.FEISHU_APP_SECRET }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      # 运行测试（整点和半点任务）
+      - name: Run main task
+        if: github.event.schedule == '0,30 * * * *'
+        run: python main.py --to_feishu --app_id ${{ secrets.FEISHU_APP_ID }} --app_secret ${{ secrets.FEISHU_APP_SECRET }}
+      # 运行晚间任务（七点五十五）
+      - name: Run evening task
+        if: github.event.schedule == '55 11 * * *'
+        run: python main.py --to_email  --sender_email ${{ secrets.SENDER_EMAIL }} --password ${{ secrets.EMAIL_PASSWORD }} --receiver_email ${{ secrets.RECEIVER_EMAIL }}
