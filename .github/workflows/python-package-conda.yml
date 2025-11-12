@@ -1,11 +1,10 @@
 name: Python CI
+
 on:
- push:
-   branches:
-     - main
- pull_request:
-   branches:
-     - main
+  schedule:
+    # 在每个整点和半点执行 (0分和30分)
+    - cron: '0,30 * * * *'
+    
 jobs:
  build:
    runs-on: ubuntu-latest
@@ -25,4 +24,4 @@ jobs:
          pip install -r requirements.txt
      # 运行测试
      - name: Run
-       run: python main.py
+       run: python main.py --app_id ${{ secrets.FEISHU_APP_ID }} --app_secret ${{ secrets.FEISHU_APP_SECRET }}
