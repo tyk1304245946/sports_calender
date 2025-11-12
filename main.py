@@ -403,7 +403,7 @@ if __name__ == "__main__":
     if args.to_email and args.receiver_email:
         sender_email = args.sender_email
         password = args.password
-        receiver_email = args.receiver_email
+        receiver_emails = args.receiver_email
 
         smtp_server = "smtp.qq.com"
         port = 587
@@ -411,5 +411,6 @@ if __name__ == "__main__":
         body = "请查收附件中的深圳赛区赛程数据汇总。"
         excel_file_path = f"./深圳赛区赛程_{find_data}.xlsx"
         # 发送邮件
-        send_email_with_excel(smtp_server, port, sender_email, password,
-                         receiver_email, subject, body, excel_file_path)
+        for receiver_email in receiver_emails.split(','):
+            send_email_with_excel(smtp_server, port, sender_email, password,
+                                  receiver_email, subject, body, excel_file_path)
