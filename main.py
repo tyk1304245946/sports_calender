@@ -396,8 +396,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-    # 获取t+2的日期
-    find_data = (datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')
+    # 获取t+1的日期
+    find_data = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
     main(args.app_id, args.app_secret, find_data, to_feishu=args.to_feishu)
     
     if args.to_email and args.receiver_email:
