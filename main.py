@@ -1,4 +1,5 @@
 import argparse
+from zoneinfo import ZoneInfo
 import requests
 import numpy as np
 import pandas as pd
@@ -397,7 +398,7 @@ if __name__ == "__main__":
 
 
     # 获取t+1的日期
-    find_data = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
+    find_data = (datetime.now(ZoneInfo('Asia/Shanghai')) + timedelta(days=1)).strftime('%Y-%m-%d')
     main(args.app_id, args.app_secret, find_data, to_feishu=args.to_feishu)
     
     if args.to_email and args.receiver_email:
